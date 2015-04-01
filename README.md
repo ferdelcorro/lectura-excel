@@ -1,3 +1,5 @@
-Chicos esto sirve para poder leer un archivo exel, por lo que entendí los 
-datos del proyecto van a ser pasados como exels así que lo vamos a necesitar
-y para quien no conoce la sintaxis de python puede ser molesto.
+1) Ejecutar: $virtualenv venv
+
+2) Ejecutar: $source venv/bin/activate
+
+3) Ejecutar: $pip install -r requirements.txt

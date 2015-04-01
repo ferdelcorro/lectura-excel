@@ -5,59 +5,63 @@ from os.path import join, normpath
 """
 para esto necesitan hacer un 
 $sudo pip install xlrd
+$sudo pip install xlwt
 """
 from xlrd import open_workbook
+from xlwt import Workbook
 from time import sleep
 
-"""
-primero veamos donde estámos parados
-"""
+
+#primero veamos donde estámos parados
 path = getcwd()
-"""
-unimos donde estamos con el archivo que queremos abrir, en este caso yo se
-que se encuentra en ese dir
-"""
+
+#unimos donde estamos con el archivo que queremos abrir, en este caso yo se
+#que se encuentra en ese dir
+
 path = normpath(join(path, 'MODELO IMPORTADOR.xls'))
 print path
 
-"""
-abrimos el archivo exel
-"""
+
+#abrimos el archivo exel
 wb = open_workbook(path)
 
-"""
-sheets = pestañas del archivo exel, veamos solo la primera
-"""
+
+#sheets = pestañas del archivo exel, veamos solo la primera
 s = wb.sheets()[0]
 print s.name
-max_col = 0
 datos = []
-"""
-recorremos las filas
-"""
+
+#recorremos las filas
 for row in range(s.nrows):
     filas = []
-    """
-    recorremos las columnas
-    """
+    
+    #recorremos las columnas
     for col in range(s.ncols):
-        """
-        max_col contiene la máxima cantidad de columnas con datos, para no
-        guardar datos vacíos luego que se acaba la tabla
-        """
-        if (int(col) >= max_col) and (s.cell(row, col).value is not None):
-            max_col += 1
-        if (int(col) <= max_col) and (s.cell(row, col).value is not None):
-            filas.append(s.cell(row, col).value)
-    """
-    por las dudas, datos es [[datos de la fila 0], [datos de la fila 1], ....]
-    """
+        filas.append(s.cell(row, col).value)
+    
+    #por las dudas, datos es [[datos de la fila 0], [datos de la fila 1], ....]
     datos.append(filas)
-print max_col
 
-"""
-aquí los imprimimos para poder verlos, hacemos un sleep para verlo más lento
-"""
-for elem in datos:
-    print elem
-    sleep(5)
+
+#aquí los imprimimos para poder verlos, hacemos un sleep para verlo más lento
+#for elem in datos:
+    #print elem
+    #sleep(2)
+
+
+#ahora vamos a escribir otro exel
+workbook = Workbook() #Creamos un objeto exel
+sheet = workbook.add_sheet('test') #Le adjuntamos una hoja
+
+
+#recorremos todos los datos y escribimos
+n_fil = 0
+for fil in datos:
+    n_col = 0
+    for col in fil:
+        sheet.write(n_fil, n_col, col)
+        n_col += 1
+    n_fil += 1
+
+#guardamos
+workbook.save('test.xls')
